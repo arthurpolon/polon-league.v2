@@ -8,7 +8,7 @@ import Logo from 'public/logo.svg';
 import HomeIcon from 'public/home-icon.svg';
 import { FormEvent } from 'react';
 
-const SummonerPage = () => {
+const FormPage = () => {
   const { isDark } = useTheme();
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -25,10 +25,10 @@ const SummonerPage = () => {
       <div className="w-11/12 max-w-7xl mx-auto pt-10">
         <div className="flex justify-between items-center dark:text-gray-100">
           <Link href="/">
-            <div className="cursor-pointer flex w-fit">
+            <a className="flex w-fit">
               <HomeIcon className="mr-2" />
               <span className="font-medium text-lg">Back To Home</span>
-            </div>
+            </a>
           </Link>
 
           <ThemeSwitch />
@@ -77,4 +77,4 @@ const SummonerPage = () => {
   );
 };
 
-export default SummonerPage;
+export default FormPage;
