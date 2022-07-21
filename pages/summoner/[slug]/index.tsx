@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import Sidebar from '../components/Sidebar';
+import Layout from './components/Layout';
 
 interface ISummonerPageProps {
   summonerName: string;
@@ -93,13 +93,12 @@ const SummonerPage = (props: ISummonerPageProps) => {
   );
 
   return (
-    <main className="flex bg-pink-50 dark:bg-slate-800 min-w-screen min-h-screen">
-      <Sidebar />
+    <Layout>
       <div>
         {summonerCard()}
         <div className="mt-12">{victoryPercentageCard()}</div>
       </div>
-    </main>
+    </Layout>
   );
 };
 

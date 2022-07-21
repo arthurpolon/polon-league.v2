@@ -1,25 +1,14 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { useRouter } from 'next/router';
-import Sidebar from '../components/Sidebar';
+import Layout from './components/Layout';
 
 interface ISummonerPageProps {
   summonerName: string;
 }
 
 const SummonerPage = (props: ISummonerPageProps) => {
-  const router = useRouter();
-
-  if (router.isFallback) {
-    return <h1>Loading</h1>;
-  }
-
   console.log(props.summonerName);
 
-  return (
-    <main className="bg-pink-50 dark:bg-slate-800 min-w-screen min-h-screen">
-      <Sidebar />
-    </main>
-  );
+  return <Layout>Champions Mastery</Layout>;
 };
 
 export const getStaticPaths: GetStaticPaths = () => {
