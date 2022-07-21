@@ -3,15 +3,23 @@ import type { AppContext, AppProps } from 'next/app';
 import cookies from 'next-cookies';
 import { TTheme } from '../types/theme';
 import { ThemeProvider } from '../contexts/theme';
+import { LoadingProvider } from 'contexts/loading';
 
 interface ICustomAppProps {
   theme: TTheme;
 }
 
-const App = ({ Component, pageProps, theme }: ICustomAppProps & AppProps) => {
+const App = ({
+  Component,
+  pageProps,
+  router,
+  theme,
+}: ICustomAppProps & AppProps) => {
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <LoadingProvider router={router}>
+        <Component {...pageProps} />
+      </LoadingProvider>
     </ThemeProvider>
   );
 };
