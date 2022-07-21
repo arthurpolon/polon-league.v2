@@ -25,16 +25,27 @@ export const LoadingProvider = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    router.events.on('routeChangeStart', () => setLoading(true));
-    router.events.on('routeChangeComplete', () => setLoading(false));
-    router.events.on('routeChangeError', () => setLoading(false));
+    let timeout: NodeJS.Timeout;
+
+    const handleStart = () => {
+      timeout = setTimeout(() => setLoading(true), 1000);
+    };
+
+    const handleComplete = () => {
+      clearTimeout(timeout);
+      setLoading(false);
+    };
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
 
     () => {
-      router.events.off('routeChangeStart', () => setLoading(true));
-      router.events.off('routeChangeComplete', () => setLoading(false));
-      router.events.off('routeChangeError', () => setLoading(false));
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
     };
-  }, []);
+  }, [router.events]);
 
   return (
     <LoadingContext.Provider value={{ loading }}>
