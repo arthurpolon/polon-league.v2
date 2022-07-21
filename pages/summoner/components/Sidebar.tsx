@@ -35,7 +35,7 @@ const Sidebar = () => {
 
   const renderLinks = () =>
     links(summonerName).map((link) => {
-      const isActive = link.to === asPath;
+      const isActive = link.to === decodeURIComponent(asPath);
 
       return (
         <Link href={link.to} key={link.label}>

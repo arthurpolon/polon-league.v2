@@ -7,8 +7,10 @@ import Logo from 'public/logo.svg';
 
 import HomeIcon from 'public/home-icon.svg';
 import { FormEvent } from 'react';
+import { useRouter } from 'next/router';
 
 const FormPage = () => {
+  const router = useRouter();
   const { isDark } = useTheme();
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -17,7 +19,7 @@ const FormPage = () => {
     const formData = new FormData(event.target as HTMLFormElement);
     const summonerName = formData.get('summoner-name') as string;
 
-    console.log(summonerName);
+    router.push(`/summoner/${summonerName}`);
   };
 
   return (
@@ -54,7 +56,9 @@ const FormPage = () => {
             type="text"
             name="summoner-name"
             placeholder="Summoner name"
-            className="border border-slate-400 rounded px-3 py-4"
+            className={`border border-slate-400 rounded px-3 py-4 bg-transparent ${
+              isDark ? 'text-white' : 'text-black'
+            }`}
             required
           />
           <button

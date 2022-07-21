@@ -13,8 +13,6 @@ const SummonerPage = (props: ISummonerPageProps) => {
     return <h1>Loading</h1>;
   }
 
-  console.log(props.summonerName);
-
   return (
     <main className="bg-pink-50 dark:bg-slate-800 min-w-screen min-h-screen">
       <Sidebar />
