@@ -18,14 +18,13 @@ const SummonerPage = (props: ISummonerPageProps) => {
 
   return (
     <Layout>
-      <div>
-        <SummonerCard />
-        <div className="mt-12">
+      <div className="flex flex-wrap justify-center items-center h-fit m-auto gap-12 py-12">
+        <div className="flex flex-col gap-24">
+          <SummonerCard />
           <VictoryPercentageCard />
         </div>
-        <div className="mt-12">
-          <MostPlayedChampionCard />
-        </div>
+
+        <MostPlayedChampionCard />
       </div>
     </Layout>
   );

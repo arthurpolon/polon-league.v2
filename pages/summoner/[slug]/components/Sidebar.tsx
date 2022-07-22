@@ -68,7 +68,7 @@ const Sidebar = () => {
     });
 
   return (
-    <div className="flex flex-col justify-between w-80 min-h-screen border-r border-gray-300 bg-white dark:bg-slate-900 dark:border-slate-700">
+    <div className="flex flex-col justify-between min-w-[20rem] min-h-screen border-r border-gray-300 bg-white dark:bg-slate-900 dark:border-slate-700">
       <div>
         <div className="flex justify-between items-center gap-2 px-6 py-6">
           <Link href="/">
