@@ -1,3 +1,4 @@
+import CircleProgress from 'components/CircleProgress';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Layout from './components/Layout';
@@ -86,8 +87,12 @@ const SummonerPage = (props: ISummonerPageProps) => {
         </div>
       </div>
 
-      <div>
-        <div className="rounded-full bg-gray-600 w-32 h-32" />
+      <div className="relative">
+        <span className="text-3xl bg-gradient-to-b from-pink-400 to-blue-700 text-transparent bg-clip-text font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          63%
+        </span>
+
+        <CircleProgress percentage={63} />
       </div>
     </div>
   );
