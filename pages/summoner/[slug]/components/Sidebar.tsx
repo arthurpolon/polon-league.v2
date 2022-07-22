@@ -32,13 +32,12 @@ const links = (summonerName: string) => {
 
 const Sidebar = () => {
   const { loading } = useLoading();
-  const { asPath, query } = useRouter();
+  const { asPath } = useRouter();
 
   const [clickedLinkPath, setClickedLinkPath] = useState('');
 
   const currentPath = loading ? clickedLinkPath : decodeURIComponent(asPath);
-
-  const summonerName = query.slug as string;
+  const summonerName = asPath.split('/')[2];
 
   const renderLinks = () =>
     links(summonerName).map((link) => {
