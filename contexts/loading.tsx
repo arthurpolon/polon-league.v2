@@ -41,6 +41,7 @@ export const LoadingProvider = ({
     router.events.on('routeChangeError', handleComplete);
 
     () => {
+      clearTimeout(timeout);
       router.events.off('routeChangeStart', handleStart);
       router.events.off('routeChangeComplete', handleComplete);
       router.events.off('routeChangeError', handleComplete);
