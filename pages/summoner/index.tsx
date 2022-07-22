@@ -7,8 +7,10 @@ import Logo from 'public/logo.svg';
 
 import HomeIcon from 'public/home-icon.svg';
 import { FormEvent } from 'react';
+import { useRouter } from 'next/router';
 
-const SummonerPage = () => {
+const FormPage = () => {
+  const router = useRouter();
   const { isDark } = useTheme();
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -17,7 +19,7 @@ const SummonerPage = () => {
     const formData = new FormData(event.target as HTMLFormElement);
     const summonerName = formData.get('summoner-name') as string;
 
-    console.log(summonerName);
+    router.push(`/summoner/${summonerName}`);
   };
 
   return (
@@ -25,10 +27,10 @@ const SummonerPage = () => {
       <div className="w-11/12 max-w-7xl mx-auto pt-10">
         <div className="flex justify-between items-center dark:text-gray-100">
           <Link href="/">
-            <div className="cursor-pointer flex w-fit">
+            <a className="flex w-fit">
               <HomeIcon className="mr-2" />
               <span className="font-medium text-lg">Back To Home</span>
-            </div>
+            </a>
           </Link>
 
           <ThemeSwitch />
@@ -54,7 +56,9 @@ const SummonerPage = () => {
             type="text"
             name="summoner-name"
             placeholder="Summoner name"
-            className="border border-slate-400 rounded px-3 py-4"
+            className={`border border-slate-400 rounded px-3 py-4 bg-transparent ${
+              isDark ? 'text-white' : 'text-black'
+            }`}
             required
           />
           <button
@@ -77,4 +81,4 @@ const SummonerPage = () => {
   );
 };
 
-export default SummonerPage;
+export default FormPage;
