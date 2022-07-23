@@ -5,8 +5,6 @@ import PersonIcon from 'public/person-icon.svg';
 import MasteryIcon from 'public/mastery-icon.svg';
 import chatIcon from 'public/chat-icon.svg';
 import { useRouter } from 'next/router';
-import { useLoading } from 'contexts/loading';
-import { useState } from 'react';
 
 const links = (summonerName: string) => {
   const baseUrl = `/summoner/${summonerName}`;
@@ -31,14 +29,10 @@ const links = (summonerName: string) => {
 };
 
 const Sidebar = () => {
-  const { loading } = useLoading();
   const { asPath, query } = useRouter();
 
-  const [clickedLinkPath, setClickedLinkPath] = useState('');
-
-  const currentPath = loading ? clickedLinkPath : decodeURIComponent(asPath);
-
   const summonerName = query.slug as string;
+  const currentPath = decodeURIComponent(asPath);
 
   const renderLinks = () =>
     links(summonerName).map((link) => {
@@ -50,7 +44,6 @@ const Sidebar = () => {
             className={`flex justify-start items-center gap-4 pl-14 py-5 w-11/12 rounded-tr-full rounded-br-full ${
               isActive && 'bg-gradient-to-b from-pink-400 to-blue-700'
             }`}
-            onClick={() => setClickedLinkPath(link.to)}
           >
             <link.icon
               className={`w-8 ${isActive ? 'text-white' : 'text-pink-400'}`}
