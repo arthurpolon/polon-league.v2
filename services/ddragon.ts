@@ -8,7 +8,7 @@ const api = axios.create({
 export class DdragonApi {
   static async getGameVersions() {
     const { data: gameVersions } = await api.get<
-      IDdragonApiResponse['gameVersions']
+      IDdragonApiResponse['versions']
     >('/api/versions.json');
 
     return gameVersions;
