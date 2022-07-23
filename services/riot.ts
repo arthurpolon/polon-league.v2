@@ -24,42 +24,42 @@ export class RiotApi {
     return summonerInfo as IRiotApiResponse['summoner'];
   }
 
-  async getRankedInfo(summonerId: string) {
-    const { data: rankedInfoResponse } = await this.api.get(
+  async getRanked(summonerId: string) {
+    const { data: rankedResponse } = await this.api.get(
       `/league/v4/entries/by-summoner/${summonerId}`
     );
 
-    const soloRankedInfo = rankedInfoResponse.filter(
+    const soloRanked = rankedResponse.filter(
       (info: any) => info?.queueType === 'RANKED_SOLO_5x5'
     )[0];
-    const flexRankedInfo = rankedInfoResponse.filter(
+    const flexRanked = rankedResponse.filter(
       (info: any) => info?.queueType === 'RANKED_FLEX_SR'
     )[0];
 
-    const rankedInfo: IRiotApiResponse['rankedInfo'] = {};
+    const ranked: IRiotApiResponse['ranked'] = {};
 
-    if (soloRankedInfo) rankedInfo.soloRankedInfo = soloRankedInfo;
-    if (flexRankedInfo) rankedInfo.flexRankedInfo = flexRankedInfo;
+    if (soloRanked) ranked.soloRanked = soloRanked;
+    if (flexRanked) ranked.flexRanked = flexRanked;
 
-    return rankedInfo;
+    return ranked;
   }
 
-  async getChampionsMastery(summonerId: string) {
-    const { data: championsMastery } = await this.api.get(
+  async getMastery(summonerId: string) {
+    const { data: mastery } = await this.api.get(
       `/champion-mastery/v4/champion-masteries/by-summoner/${summonerId}`
     );
 
-    return championsMastery as IRiotApiResponse['championsMastery'];
+    return mastery as IRiotApiResponse['mastery'];
   }
 
   async getAll(summonerName: string) {
     const summoner = await this.getSummoner(summonerName);
 
-    const [rankedInfo, championsMastery] = await Promise.all([
-      this.getRankedInfo(summoner.id),
-      this.getChampionsMastery(summoner.id),
+    const [ranked, mastery] = await Promise.all([
+      this.getRanked(summoner.id),
+      this.getMastery(summoner.id),
     ]);
 
-    return { summoner, rankedInfo, championsMastery };
+    return { summoner, ranked, mastery };
   }
 }

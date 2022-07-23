@@ -5,22 +5,22 @@ interface ISummonerCardProps {
   profileIcon: string;
 
   summoner: IRiotApiResponse['summoner'];
-  rankedInfo: IRiotApiResponse['rankedInfo'];
+  ranked: IRiotApiResponse['ranked'];
 }
 
 const SummonerCard = ({
   summoner,
-  rankedInfo,
+  ranked,
   profileIcon,
 }: ISummonerCardProps) => {
-  const { soloRankedInfo, flexRankedInfo } = rankedInfo;
+  const { soloRanked, flexRanked } = ranked;
 
-  const soloDuoRank = soloRankedInfo
-    ? `${soloRankedInfo.tier.toLowerCase()} ${soloRankedInfo.rank}`
+  const soloDuoRank = soloRanked
+    ? `${soloRanked.tier.toLowerCase()} ${soloRanked.rank}`
     : 'Unranked';
 
-  const flexRank = flexRankedInfo
-    ? `${flexRankedInfo.tier.toLowerCase()} ${flexRankedInfo.rank}`
+  const flexRank = flexRanked
+    ? `${flexRanked.tier.toLowerCase()} ${flexRanked.rank}`
     : 'Unranked';
 
   return (

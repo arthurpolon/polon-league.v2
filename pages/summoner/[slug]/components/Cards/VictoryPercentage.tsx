@@ -5,15 +5,15 @@ import OkEmote from 'public/okay-emote.webp';
 import Image from 'next/image';
 
 interface IVictoryPercentageCardProps {
-  rankedInfo: IRiotApiResponse['rankedInfo'];
+  ranked: IRiotApiResponse['ranked'];
 }
 
-type TRankedType = keyof IRiotApiResponse['rankedInfo'];
+type TRankedType = keyof IRiotApiResponse['ranked'];
 
-const VictoryPercentageCard = ({ rankedInfo }: IVictoryPercentageCardProps) => {
-  const [rankedType, setRankedType] = useState<TRankedType>('soloRankedInfo');
+const VictoryPercentageCard = ({ ranked }: IVictoryPercentageCardProps) => {
+  const [rankedType, setRankedType] = useState<TRankedType>('soloRanked');
 
-  const currentRank = rankedInfo[rankedType];
+  const currentRank = ranked[rankedType];
 
   const getWinPercentage = () => {
     if (!currentRank) {
@@ -42,7 +42,7 @@ const VictoryPercentageCard = ({ rankedInfo }: IVictoryPercentageCardProps) => {
             className="absolute inset-0 appearance-none peer cursor-pointer"
             type="radio"
             defaultChecked
-            onClick={() => setRankedType('soloRankedInfo')}
+            onClick={() => setRankedType('soloRanked')}
           />
           <span className="px-3 py-2 font-semibold rounded bg-gray-400 dark:bg-gray-600 text-white group-hover:brightness-[0.9] peer-checked:bg-gradient-to-b peer-checked:text-white transition-all from-pink-400 to-blue-700">
             Solo/Duo
@@ -53,7 +53,7 @@ const VictoryPercentageCard = ({ rankedInfo }: IVictoryPercentageCardProps) => {
             name="radio"
             className="absolute inset-0 appearance-none peer cursor-pointer"
             type="radio"
-            onClick={() => setRankedType('flexRankedInfo')}
+            onClick={() => setRankedType('flexRanked')}
           />
           <span className="px-3 py-2 font-semibold rounded bg-gray-400 dark:bg-gray-600 text-white group-hover:brightness-[0.9] peer-checked:bg-gradient-to-b peer-checked:text-white transition-all from-pink-400 to-blue-700">
             Flex

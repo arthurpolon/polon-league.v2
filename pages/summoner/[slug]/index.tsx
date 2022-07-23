@@ -1,6 +1,8 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { DdragonApi } from 'services/ddragon';
-import { RiotApi } from 'services/riot';
+import axios from 'axios';
+import LoadingCube from 'components/LoadingCube/LoadingCube';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { IDdragonApiResponse } from 'types/ddragonApiResponse';
 import { IRiotApiResponse } from 'types/riotApiResponse';
 import MostPlayedChampionCard from './components/Cards/MostPlayedChampion';
 import SummonerCard from './components/Cards/Summoner';
@@ -12,82 +14,53 @@ interface ISummonerPageProps {
   mostPlayedChampion: { name: string; masteryPoints: number } | null;
 
   summoner: IRiotApiResponse['summoner'];
-  rankedInfo: IRiotApiResponse['rankedInfo'];
+  ranked: IRiotApiResponse['ranked'];
 }
 
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 const SummonerPage = (props: ISummonerPageProps) => {
+  const router = useRouter();
+
+  const summonerName = router.query.slug as string;
+
+  const { data: riotData } = useSWR<IRiotApiResponse>(
+    `/api/riot/summoner/${summonerName}`,
+    fetcher
+  );
+
+  const { data: ddragonData } = useSWR<IDdragonApiResponse>(
+    '/api/ddragon',
+    fetcher
+  );
+
+  const profileIcon = `https://ddragon.leagueoflegends.com/cdn/${ddragonData?.versions[0]}/img/profileicon/${riotData?.summoner.profileIconId}.png`;
+
   return (
     <Layout>
-      <div className="flex flex-wrap justify-center items-center h-fit m-auto gap-12 py-12">
-        <div className="flex flex-col gap-24">
-          <SummonerCard
-            summoner={props.summoner}
-            rankedInfo={props.rankedInfo}
-            profileIcon={props.profileIcon}
-          />
-          <VictoryPercentageCard rankedInfo={props.rankedInfo} />
-        </div>
+      {riotData && ddragonData ? (
+        <div className="flex flex-wrap justify-center items-center h-fit m-auto gap-12 py-12">
+          <div className="flex flex-col gap-24">
+            <SummonerCard
+              summoner={riotData.summoner}
+              ranked={riotData.ranked}
+              profileIcon={profileIcon}
+            />
+            <VictoryPercentageCard ranked={riotData.ranked} />
+          </div>
 
-        <MostPlayedChampionCard mostPlayedChampion={props.mostPlayedChampion} />
-      </div>
+          <MostPlayedChampionCard
+            mastery={riotData.mastery}
+            champions={ddragonData.champions}
+          />
+        </div>
+      ) : (
+        <div className="flex justify-center items-center min-h-screen mx-auto">
+          <LoadingCube />
+        </div>
+      )}
     </Layout>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
-};
-
-export const getStaticProps: GetStaticProps<ISummonerPageProps> = async (
-  context
-) => {
-  const summonerName = context.params!.slug as string;
-
-  const riotApi = new RiotApi(process.env.RIOT_DEVELOPMENT_KEY || '');
-
-  try {
-    const [riotApiData, ddragonApiData] = await Promise.all([
-      await riotApi.getAll(summonerName),
-      await DdragonApi.getAll(),
-    ]);
-
-    const { champions, gameVersions } = ddragonApiData;
-    const { summoner, rankedInfo, championsMastery } = riotApiData;
-
-    const findMostPlayedChampion =
-      championsMastery.length > 0
-        ? Object.values(champions.data).find(
-            (value) => value.key === championsMastery[0].championId.toString()
-          )
-        : null;
-
-    const profileIcon = `https://ddragon.leagueoflegends.com/cdn/${gameVersions[0]}/img/profileicon/${summoner.profileIconId}.png`;
-
-    return {
-      props: {
-        profileIcon,
-        mostPlayedChampion: findMostPlayedChampion
-          ? {
-              name: findMostPlayedChampion.name,
-              masteryPoints: championsMastery[0].championPoints,
-            }
-          : null,
-
-        summoner: summoner,
-        rankedInfo: rankedInfo,
-      },
-      revalidate: 60 * 60 * 0.5 /* 30 minutes */,
-    };
-  } catch (err) {
-    console.log(err);
-
-    return {
-      notFound: true,
-    };
-  }
 };
 
 export default SummonerPage;

@@ -47,7 +47,7 @@ export interface IChampion {
 }
 
 export interface IDdragonApiResponse {
-  gameVersions: string[];
+  versions: string[];
   champions: {
     type: string;
     format: string;

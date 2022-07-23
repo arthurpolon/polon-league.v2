@@ -1,4 +1,4 @@
-interface IChampionMastery {
+interface IMastery {
   championId: number;
   championLevel: number;
   championPoints: number;
@@ -10,7 +10,7 @@ interface IChampionMastery {
   tokensEarned: number;
 }
 
-interface IRankedCommonFields {
+interface IRankedFields {
   veteran: boolean;
   inactive: boolean;
   hotStreak: boolean;
@@ -27,17 +27,17 @@ interface IRankedCommonFields {
   summonerName: string;
 }
 
-interface IRankedSoloInfo extends IRankedCommonFields {
+interface ISoloRanked extends IRankedFields {
   queueType: 'RANKED_SOLO_5x5';
 }
 
-interface IRankedFlexInfo extends IRankedCommonFields {
+interface IFlexRanked extends IRankedFields {
   queueType: 'RANKED_FLEX_SR';
 }
 
-type IRankedInfo = {
-  soloRankedInfo?: IRankedSoloInfo;
-  flexRankedInfo?: IRankedFlexInfo;
+type IRanked = {
+  soloRanked?: ISoloRanked;
+  flexRanked?: IFlexRanked;
 };
 
 interface ISummoner {
@@ -52,6 +52,6 @@ interface ISummoner {
 
 export interface IRiotApiResponse {
   summoner: ISummoner;
-  rankedInfo: IRankedInfo;
-  championsMastery: IChampionMastery[];
+  ranked: IRanked;
+  mastery: IMastery[];
 }
