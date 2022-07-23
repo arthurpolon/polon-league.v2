@@ -54,8 +54,11 @@ export class RiotApi {
 
   async getAll(summonerName: string) {
     const summoner = await this.getSummoner(summonerName);
-    const rankedInfo = await this.getRankedInfo(summoner.id);
-    const championsMastery = await this.getChampionsMastery(summoner.id);
+
+    const [rankedInfo, championsMastery] = await Promise.all([
+      this.getRankedInfo(summoner.id),
+      this.getChampionsMastery(summoner.id),
+    ]);
 
     return { summoner, rankedInfo, championsMastery };
   }
