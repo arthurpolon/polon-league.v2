@@ -8,7 +8,7 @@ export default async function handler(
   try {
     const summonerName = req.query.summoner as string;
 
-    const riotApi = new RiotApi(process.env.RIOT_DEVELOPMENT_KEY || '');
+    const riotApi = new RiotApi(process.env.RIOT_API_KEY || '');
 
     const data = await riotApi.getAll(summonerName);
 
