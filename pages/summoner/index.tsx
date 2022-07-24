@@ -40,7 +40,7 @@ const FormPage = () => {
       <div className="bg-white dark:bg-slate-900 flex flex-col w-11/12 max-w-lg p-8 rounded-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="flex flex-col justify-center items-center gap-2">
           <Logo />
-          <span className="bg-gradient-to-b from-pink-400 to-blue-700 text-transparent bg-clip-text font-bold">
+          <span className="main-gradient text-transparent bg-clip-text font-bold">
             Polon League
           </span>
         </div>
@@ -63,7 +63,7 @@ const FormPage = () => {
           />
           <button
             type="submit"
-            className="text-gray-100 py-4 font-medium rounded-lg bg-gradient-to-b from-pink-400 to-blue-700 hover:brightness-[0.9] transition-all"
+            className="text-gray-100 py-4 font-medium rounded-lg main-gradient hover:brightness-[0.9] transition-all"
           >
             Continue
           </button>

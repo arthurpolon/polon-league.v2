@@ -5,3 +5,7 @@
 * {
   @apply transition-colors;
 }
+
+.main-gradient {
+  @apply bg-gradient-to-b from-pink-400 to-blue-700;
+}

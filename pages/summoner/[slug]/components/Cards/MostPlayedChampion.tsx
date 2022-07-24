@@ -21,7 +21,7 @@ const MostPlayedChampionCard = ({
 
   return (
     <div className="w-fit flex flex-col justify-start items-center p-9 bg-white dark:bg-slate-900">
-      <h2 className="text-2xl mb-4 bg-gradient-to-b from-pink-400 to-blue-700 text-transparent bg-clip-text font-bold">
+      <h2 className="text-2xl mb-4 main-gradient text-transparent bg-clip-text font-bold">
         Most Played Champion
       </h2>
       <div className="relative w-[200px] h-[380px] overflow-hidden rounded-md">
@@ -32,7 +32,7 @@ const MostPlayedChampionCard = ({
             priority
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-b from-pink-400 to-blue-700 opacity-20" />
+          <div className="absolute inset-0 main-gradient opacity-20" />
         )}
       </div>
 
