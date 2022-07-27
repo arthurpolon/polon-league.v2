@@ -13,11 +13,7 @@ const MostPlayedChampionCard = ({
   champions,
 }: IMostPlayedChampionCardProps) => {
   const mostPlayedChampion =
-    mastery.length > 0
-      ? Object.values(champions.data).find(
-          (value) => value.key === mastery[0].championId.toString()
-        )
-      : null;
+    mastery.length > 0 ? champions.data[mastery[0].championId] : null;
 
   return (
     <div className="w-fit flex flex-col justify-start items-center p-9 bg-white dark:bg-slate-900">
@@ -27,7 +23,7 @@ const MostPlayedChampionCard = ({
       <div className="relative w-[200px] h-[380px] overflow-hidden rounded-md">
         {mostPlayedChampion ? (
           <Image
-            src={`https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${mostPlayedChampion.name}_0.jpg`}
+            src={`https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${mostPlayedChampion.id}_0.jpg`}
             layout="fill"
             priority
           />

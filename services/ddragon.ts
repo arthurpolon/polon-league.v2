@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IDdragonApiResponse } from 'types/ddragonApiResponse';
+import { IChampion, IDdragonApiResponse } from 'types/ddragonApiResponse';
 
 const api = axios.create({
   baseURL: 'https://ddragon.leagueoflegends.com',
@@ -15,9 +15,21 @@ export class DdragonApi {
   }
 
   static async getChampions(gameVersion: string) {
-    const { data: champions } = await api.get<IDdragonApiResponse['champions']>(
-      `/cdn/${gameVersion}/data/en_US/champion.json`
-    );
+    const { data: championsResponse } = await api.get<
+      IDdragonApiResponse['champions']
+    >(`/cdn/${gameVersion}/data/en_US/champion.json`);
+
+    const championsObject: { [championId: string]: IChampion } = {};
+
+    // create a new Object mapping the championID to the object key
+    Object.values(championsResponse.data).forEach((champion) => {
+      championsObject[champion.key] = champion;
+    });
+
+    const champions = {
+      ...championsResponse,
+      data: championsObject,
+    };
 
     return champions;
   }

@@ -9,19 +9,10 @@ import SummonerCard from './components/Cards/Summoner';
 import VictoryPercentageCard from './components/Cards/VictoryPercentage';
 import Layout from './components/Layout';
 
-interface ISummonerPageProps {
-  profileIcon: string;
-  mostPlayedChampion: { name: string; masteryPoints: number } | null;
-
-  summoner: IRiotApiResponse['summoner'];
-  ranked: IRiotApiResponse['ranked'];
-}
-
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const SummonerPage = (props: ISummonerPageProps) => {
+const SummonerPage = () => {
   const router = useRouter();
-
   const summonerName = router.query.slug as string;
 
   const { data: riotData } = useSWR<IRiotApiResponse>(

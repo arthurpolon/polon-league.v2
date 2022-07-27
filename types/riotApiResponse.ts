@@ -1,4 +1,4 @@
-interface IMastery {
+export interface IMastery {
   championId: number;
   championLevel: number;
   championPoints: number;
@@ -40,7 +40,7 @@ type IRanked = {
   flexRanked?: IFlexRanked;
 };
 
-interface ISummoner {
+export interface ISummoner {
   accountId: string;
   id: string;
   name: string;

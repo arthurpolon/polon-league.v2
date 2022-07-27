@@ -17,7 +17,7 @@ const links = (summonerName: string) => {
     },
     {
       label: 'Champions Mastery',
-      to: `${baseUrl}/champions-mastery`,
+      to: `${baseUrl}/mastery`,
       icon: MasteryIcon,
     },
     {

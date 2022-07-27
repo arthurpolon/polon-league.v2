@@ -9,3 +9,11 @@
 .main-gradient {
   @apply bg-gradient-to-b from-pink-400 to-blue-700;
 }
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-500 rounded;
+}
