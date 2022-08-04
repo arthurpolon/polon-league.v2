@@ -17,6 +17,7 @@ const TableRow = ({ mastery, ddragonData }: ITableRowProps) => {
 
   return (
     <tr key={mastery.championId}>
+      <td>{mastery.position}</td>
       <td className="px-8 py-8">
         <span className="flex items-center gap-4">
           <div className="relative w-12 h-12">

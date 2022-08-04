@@ -8,6 +8,7 @@ export interface IMastery {
   lastPlayTime: number;
   summonerId: string;
   tokensEarned: number;
+  position: number;
 }
 
 interface IRankedFields {

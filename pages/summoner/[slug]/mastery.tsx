@@ -1,17 +1,15 @@
 import axios from 'axios';
+import { useState, useRef, useMemo } from 'react';
 import LoadingCube from 'components/LoadingCube/LoadingCube';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { IDdragonApiResponse } from 'types/ddragonApiResponse';
 import { IMastery, ISummoner } from 'types/riotApiResponse';
 import Layout from './components/Layout';
-import ArrowLeftIcon from 'public/arrow-left-icon.svg';
-import { useEffect, useState } from 'react';
 import TableRow from './components/TableRow';
 
-const ItemsPerPageOptions = [10, 15, 20, 50, 100];
-
 const TableHeads = [
+  '#',
   'Name',
   'Mastery Level',
   'Mastery Points',
@@ -30,11 +28,9 @@ const SummonerPage = () => {
   const router = useRouter();
   const summonerName = router.query.slug as string;
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [numberOfPages, setNumberOfPages] = useState(1);
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const [masteriesToRender, setMasteriesToRender] = useState<IMastery[]>([]);
+  const [inputValue, setInputValue] = useState('');
 
   const { data: riotData } = useSWR<TMasteryResponse>(
     `/api/riot/summoner/${summonerName}/mastery`,
@@ -46,97 +42,69 @@ const SummonerPage = () => {
     fetcher
   );
 
+  const filteredMastery = useMemo(
+    () =>
+      riotData?.mastery.filter(({ championId }) =>
+        ddragonData?.champions.data[championId].name
+          .toLowerCase()
+          .includes(inputValue.toLowerCase())
+      ),
+    [inputValue, riotData]
+  );
+
   const tableHead = (label: string, idx: number) => (
-    <th key={idx + label} className="px-8 pt-12 pb-4 first:text-left">
+    <th
+      key={idx + label}
+      className={`px-8 pt-8 pb-4 ${idx === 1 && 'text-left'}`}
+    >
       {label}
     </th>
   );
-  console.log({
-    currentPage,
-    mastery: riotData?.mastery,
-    itemsPerPage,
-    numberOfPages,
-  });
-
-  useEffect(() => {
-    if (riotData) {
-      const sliceStart =
-        currentPage === 1 ? 0 : itemsPerPage * (currentPage - 1);
-
-      const sliceEnd = itemsPerPage * currentPage;
-
-      setMasteriesToRender(riotData.mastery.slice(sliceStart, sliceEnd));
-
-      setNumberOfPages(Math.ceil(riotData.mastery.length / itemsPerPage));
-    }
-  }, [riotData, itemsPerPage, currentPage]);
 
   return (
     <Layout>
       {riotData && ddragonData ? (
         <div className="overflow-auto h-screen w-full bg-white dark:bg-slate-900">
-          <h1 className="text-3xl font-bold dark:text-slate-100 pl-8 pt-12">
-            Champions Mastery
-          </h1>
+          <div className="pl-8 pt-12">
+            <h1 className="text-3xl font-bold dark:text-slate-100">
+              Champions Mastery
+            </h1>
+            <label className="flex flex-col font-medium mt-8 dark:text-slate-100">
+              Filter by name:
+              <input
+                type="text"
+                className="border border-slate-400 rounded px-3 py-2 w-72 mt-1 font-normal bg-transparent dark:text-white"
+                defaultValue={''}
+                placeholder="Champion name"
+                onChange={(e) => {
+                  if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+                  timeoutRef.current = setTimeout(
+                    () => setInputValue(e.target.value),
+                    400
+                  );
+                }}
+              />
+            </label>
+          </div>
           <table className="bg-white dark:bg-slate-900 rounded-lg min-w-[950px] w-full">
             <thead className="border-b border-b-slate-200 dark:border-b-slate-600 text-slate-400 dark:text-slate-300">
               <tr>{TableHeads.map(tableHead)}</tr>
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-slate-600 dark:text-white text-center font-medium">
-              {masteriesToRender.map((mastery) => (
-                <TableRow
-                  key={mastery.championId}
-                  mastery={mastery}
-                  ddragonData={ddragonData}
-                />
-              ))}
+              {filteredMastery ? (
+                filteredMastery.map((mastery, index) => (
+                  <TableRow
+                    key={mastery.championId}
+                    mastery={mastery}
+                    ddragonData={ddragonData}
+                  />
+                ))
+              ) : (
+                <>Nada pra mostrar</>
+              )}
             </tbody>
           </table>
-          <label>
-            Champions per page
-            <select
-              name="itemsPerPage"
-              onClick={(event) => {
-                setItemsPerPage(
-                  parseInt((event.target as HTMLSelectElement).value)
-                );
-                setCurrentPage(1);
-              }}
-            >
-              {ItemsPerPageOptions.map((option, idx) => (
-                <option
-                  value={option}
-                  key={idx + '' + option}
-                  defaultValue="10"
-                >
-                  {option}
-                </option>
-              ))}
-            </select>
-          </label>
-          <span>
-            {currentPage === 1 ? 1 : itemsPerPage * (currentPage - 1) + 1}-
-            {itemsPerPage * currentPage > riotData.mastery.length
-              ? riotData.mastery.length
-              : itemsPerPage * currentPage}{' '}
-            of {riotData.mastery.length}
-          </span>
-          <button
-            type="button"
-            className="text-slate-600 dark:text-slate-400 text-lg px-4 py-2 rounded disabled:opacity-60 transition-all disabled:cursor-not-allowed"
-            onClick={() => setCurrentPage((state) => state - 1)}
-            disabled={currentPage === 1}
-          >
-            <ArrowLeftIcon />
-          </button>
-          <button
-            type="button"
-            className="text-slate-600 dark:text-slate-400 text-lg px-4 py-2 rounded disabled:opacity-60 transition-all disabled:cursor-not-allowed"
-            onClick={() => setCurrentPage((state) => state + 1)}
-            disabled={currentPage === numberOfPages}
-          >
-            <ArrowLeftIcon className="rotate-180" />
-          </button>
         </div>
       ) : (
         <div className="flex justify-center items-center min-h-screen mx-auto">

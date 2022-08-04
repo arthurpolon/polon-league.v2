@@ -56,9 +56,7 @@ const FormPage = () => {
             type="text"
             name="summoner-name"
             placeholder="Summoner name"
-            className={`border border-slate-400 rounded px-3 py-4 bg-transparent ${
-              isDark ? 'text-white' : 'text-black'
-            }`}
+            className="border border-slate-400 rounded px-3 py-4 bg-transparent dark:text-white"
             required
           />
           <button
