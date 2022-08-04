@@ -97,7 +97,7 @@ const VictoryPercentageCard = ({ ranked }: IVictoryPercentageCardProps) => {
       </div>
 
       <div className="relative">
-        <span className="text-3xl main-gradient text-transparent bg-clip-text font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <span className="text-3xl main-gradient text-transparent bg-clip-text font-bold center-absolute">
           {winPercentage === 0 ? (
             <Image src={OkEmote} layout="fixed" width={90} height={90} />
           ) : (

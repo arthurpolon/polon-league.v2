@@ -37,7 +37,7 @@ const FormPage = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 flex flex-col w-11/12 max-w-lg p-8 rounded-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="bg-white dark:bg-slate-900 flex flex-col w-11/12 max-w-lg p-8 rounded-md fixed center-absolute">
         <div className="flex flex-col justify-center items-center gap-2">
           <Logo />
           <span className="main-gradient text-transparent bg-clip-text font-bold">
