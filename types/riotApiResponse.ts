@@ -35,7 +35,7 @@ interface IFlexRanked extends IRankedFields {
   queueType: 'RANKED_FLEX_SR';
 }
 
-type IRanked = {
+type TRanked = {
   soloRanked?: ISoloRanked;
   flexRanked?: IFlexRanked;
 };
@@ -52,6 +52,6 @@ export interface ISummoner {
 
 export interface IRiotApiResponse {
   summoner: ISummoner;
-  ranked: IRanked;
+  ranked: TRanked;
   mastery: IMastery[];
 }

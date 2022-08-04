@@ -1,13 +1,15 @@
 import axios from 'axios';
 import LoadingCube from 'components/LoadingCube/LoadingCube';
 import { useRouter } from 'next/router';
-import { format } from 'date-fns';
 import useSWR from 'swr';
 import { IDdragonApiResponse } from 'types/ddragonApiResponse';
 import { IMastery, ISummoner } from 'types/riotApiResponse';
-import { formatNumber } from 'utils/formatNumber';
 import Layout from './components/Layout';
-import Image from 'next/image';
+import ArrowLeftIcon from 'public/arrow-left-icon.svg';
+import { useEffect, useState } from 'react';
+import TableRow from './components/TableRow';
+
+const ItemsPerPageOptions = [10, 15, 20, 50, 100];
 
 const TableHeads = [
   'Name',
@@ -19,7 +21,7 @@ const TableHeads = [
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-type IMasteryResponse = {
+type TMasteryResponse = {
   mastery: IMastery[];
   summoner: ISummoner;
 };
@@ -28,7 +30,13 @@ const SummonerPage = () => {
   const router = useRouter();
   const summonerName = router.query.slug as string;
 
-  const { data: riotData } = useSWR<IMasteryResponse>(
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+
+  const [masteriesToRender, setMasteriesToRender] = useState<IMastery[]>([]);
+
+  const { data: riotData } = useSWR<TMasteryResponse>(
     `/api/riot/summoner/${summonerName}/mastery`,
     fetcher
   );
@@ -38,63 +46,97 @@ const SummonerPage = () => {
     fetcher
   );
 
-  console.log(riotData, ddragonData);
-
   const tableHead = (label: string, idx: number) => (
-    <th key={idx + label} className=" px-8 pt-12 pb-4">
+    <th key={idx + label} className="px-8 pt-12 pb-4 first:text-left">
       {label}
     </th>
   );
+  console.log({
+    currentPage,
+    mastery: riotData?.mastery,
+    itemsPerPage,
+    numberOfPages,
+  });
 
-  const tableRow = (mastery: IMastery) => {
-    const champion = ddragonData!.champions.data[mastery.championId];
+  useEffect(() => {
+    if (riotData) {
+      const sliceStart =
+        currentPage === 1 ? 0 : itemsPerPage * (currentPage - 1);
 
-    console.log(champion.name, champion.key);
+      const sliceEnd = itemsPerPage * currentPage;
 
-    const imageSrc = `http://ddragon.leagueoflegends.com/cdn/${ddragonData?.versions[0]}/img/champion/${champion.image.full}`;
+      setMasteriesToRender(riotData.mastery.slice(sliceStart, sliceEnd));
 
-    return (
-      <tr key={mastery.championId}>
-        <td className="px-8 py-8">
-          <span className="flex items-center gap-4">
-            <div className="relative w-12 h-12">
-              <Image src={imageSrc} layout="fill" />
-            </div>
-            {champion.name}
-          </span>
-        </td>
-        <td>{mastery.championLevel}</td>
-        <td>{formatNumber(mastery.championPoints)}</td>
-        <td>{format(new Date(mastery.lastPlayTime), "MMM dd',' yyyy")}</td>
-        <td>
-          {mastery.chestGranted ? (
-            <span className="rounded-full text-white dark:text-slate-100 bg-green-500 dark:bg-green-700 p-2">
-              Yes
-            </span>
-          ) : (
-            <span className="rounded-full text-white dark:text-slate-100 bg-red-400 dark:bg-red-500 p-2">
-              No
-            </span>
-          )}
-        </td>
-      </tr>
-    );
-  };
+      setNumberOfPages(Math.ceil(riotData.mastery.length / itemsPerPage));
+    }
+  }, [riotData, itemsPerPage, currentPage]);
 
   return (
     <Layout>
       {riotData && ddragonData ? (
-        <div className="flex justify-center items-center mx-auto">
-          <div className="max-h-[80vh] overflow-auto">
-            <table className="bg-white dark:bg-slate-900 rounded-lg">
-              <thead className="text-slate-600 dark:text-slate-300">
-                <tr>{TableHeads.map(tableHead)}</tr>
-              </thead>
-              <tbody className="dark:text-white text-center font-medium">
-                {riotData.mastery.map(tableRow)}
-              </tbody>
-            </table>
-          </div>
+        <div className="overflow-auto h-screen w-full bg-white dark:bg-slate-900">
+          <h1 className="text-3xl font-bold dark:text-slate-100 pl-8 pt-12">
+            Champions Mastery
+          </h1>
+          <table className="bg-white dark:bg-slate-900 rounded-lg min-w-[950px] w-full">
+            <thead className="border-b border-b-slate-200 dark:border-b-slate-600 text-slate-400 dark:text-slate-300">
+              <tr>{TableHeads.map(tableHead)}</tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-600 dark:text-white text-center font-medium">
+              {masteriesToRender.map((mastery) => (
+                <TableRow
+                  key={mastery.championId}
+                  mastery={mastery}
+                  ddragonData={ddragonData}
+                />
+              ))}
+            </tbody>
+          </table>
+          <label>
+            Champions per page
+            <select
+              name="itemsPerPage"
+              onClick={(event) => {
+                setItemsPerPage(
+                  parseInt((event.target as HTMLSelectElement).value)
+                );
+                setCurrentPage(1);
+              }}
+            >
+              {ItemsPerPageOptions.map((option, idx) => (
+                <option
+                  value={option}
+                  key={idx + '' + option}
+                  defaultValue="10"
+                >
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+          <span>
+            {currentPage === 1 ? 1 : itemsPerPage * (currentPage - 1) + 1}-
+            {itemsPerPage * currentPage > riotData.mastery.length
+              ? riotData.mastery.length
+              : itemsPerPage * currentPage}{' '}
+            of {riotData.mastery.length}
+          </span>
+          <button
+            type="button"
+            className="text-slate-600 dark:text-slate-400 text-lg px-4 py-2 rounded disabled:opacity-60 transition-all disabled:cursor-not-allowed"
+            onClick={() => setCurrentPage((state) => state - 1)}
+            disabled={currentPage === 1}
+          >
+            <ArrowLeftIcon />
+          </button>
+          <button
+            type="button"
+            className="text-slate-600 dark:text-slate-400 text-lg px-4 py-2 rounded disabled:opacity-60 transition-all disabled:cursor-not-allowed"
+            onClick={() => setCurrentPage((state) => state + 1)}
+            disabled={currentPage === numberOfPages}
+          >
+            <ArrowLeftIcon className="rotate-180" />
+          </button>
         </div>
       ) : (
         <div className="flex justify-center items-center min-h-screen mx-auto">
