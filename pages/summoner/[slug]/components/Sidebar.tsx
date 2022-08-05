@@ -17,7 +17,7 @@ const links = (summonerName: string) => {
     },
     {
       label: 'Champions Mastery',
-      to: `${baseUrl}/champions-mastery`,
+      to: `${baseUrl}/mastery`,
       icon: MasteryIcon,
     },
     {
@@ -42,7 +42,7 @@ const Sidebar = () => {
         <Link href={link.to} key={link.label}>
           <a
             className={`flex justify-start items-center gap-4 pl-14 py-5 w-11/12 rounded-tr-full rounded-br-full ${
-              isActive && 'bg-gradient-to-b from-pink-400 to-blue-700'
+              isActive && 'main-gradient'
             }`}
           >
             <link.icon
@@ -67,7 +67,7 @@ const Sidebar = () => {
           <Link href="/">
             <button className="flex justify-center items-center gap-2">
               <Logo width={52} height={52} />
-              <span className="bg-gradient-to-b from-pink-400 to-blue-700 text-transparent text-xl bg-clip-text font-bold">
+              <span className="main-gradient text-transparent text-xl bg-clip-text font-bold">
                 Polon League
               </span>
             </button>
@@ -82,7 +82,7 @@ const Sidebar = () => {
       <div className="flex justify-center items-center p-8">
         <button
           type="button"
-          className="text-white rounded font-normal p-4 bg-gradient-to-b from-pink-400 to-blue-700 hover:brightness-[0.9] transition-all"
+          className="text-white rounded font-normal p-4 main-gradient hover:brightness-[0.9] transition-all"
         >
           Choose another summoner
         </button>

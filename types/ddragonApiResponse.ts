@@ -53,7 +53,7 @@ export interface IDdragonApiResponse {
     format: string;
     version: string;
     data: {
-      [key: string]: IChampion;
+      [championId: string]: IChampion;
     };
   };
 }

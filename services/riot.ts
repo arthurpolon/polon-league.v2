@@ -45,9 +45,14 @@ export class RiotApi {
   }
 
   async getMastery(summonerId: string) {
-    const { data: mastery } = await this.api.get(
+    const { data: masteryResponse } = await this.api.get<any[]>(
       `/champion-mastery/v4/champion-masteries/by-summoner/${summonerId}`
     );
+
+    const mastery = masteryResponse.map((mastery, idx) => ({
+      ...mastery,
+      position: idx + 1,
+    }));
 
     return mastery as IRiotApiResponse['mastery'];
   }

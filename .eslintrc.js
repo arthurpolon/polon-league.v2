@@ -14,8 +14,27 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint'],
+  ignorePatterns: ['next-env.d.ts'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'require-jsdoc': 'off',
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'interface',
+        prefix: ['I'],
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'enum',
+        prefix: ['E'],
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'typeAlias',
+        prefix: ['T'],
+        format: ['PascalCase'],
+      },
+    ],
   },
 };

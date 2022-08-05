@@ -5,3 +5,19 @@
 * {
   @apply transition-colors;
 }
+
+.main-gradient {
+  @apply bg-gradient-to-b from-pink-400 to-blue-700;
+}
+
+.center-absolute {
+  @apply absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2;
+}
+
+::-webkit-scrollbar {
+  @apply w-1.5 bg-white dark:bg-slate-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-500 rounded;
+}

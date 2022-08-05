@@ -32,7 +32,7 @@ const VictoryPercentageCard = ({ ranked }: IVictoryPercentageCardProps) => {
   return (
     <div className="flex gap-12 items-center p-9 bg-white dark:bg-slate-900 rounded-lg border-gray-300 dark:border-slate-700">
       <div>
-        <h2 className="text-2xl mb-4 bg-gradient-to-b from-pink-400 to-blue-700 text-transparent bg-clip-text font-bold">
+        <h2 className="text-2xl mb-4 main-gradient text-transparent bg-clip-text font-bold">
           Victory Percentage
         </h2>
 
@@ -97,7 +97,7 @@ const VictoryPercentageCard = ({ ranked }: IVictoryPercentageCardProps) => {
       </div>
 
       <div className="relative">
-        <span className="text-3xl bg-gradient-to-b from-pink-400 to-blue-700 text-transparent bg-clip-text font-bold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <span className="text-3xl main-gradient text-transparent bg-clip-text font-bold center-absolute">
           {winPercentage === 0 ? (
             <Image src={OkEmote} layout="fixed" width={90} height={90} />
           ) : (

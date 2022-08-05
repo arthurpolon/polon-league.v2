@@ -1,4 +1,4 @@
-interface IMastery {
+export interface IMastery {
   championId: number;
   championLevel: number;
   championPoints: number;
@@ -8,6 +8,7 @@ interface IMastery {
   lastPlayTime: number;
   summonerId: string;
   tokensEarned: number;
+  position: number;
 }
 
 interface IRankedFields {
@@ -35,12 +36,12 @@ interface IFlexRanked extends IRankedFields {
   queueType: 'RANKED_FLEX_SR';
 }
 
-type IRanked = {
+type TRanked = {
   soloRanked?: ISoloRanked;
   flexRanked?: IFlexRanked;
 };
 
-interface ISummoner {
+export interface ISummoner {
   accountId: string;
   id: string;
   name: string;
@@ -52,6 +53,6 @@ interface ISummoner {
 
 export interface IRiotApiResponse {
   summoner: ISummoner;
-  ranked: IRanked;
+  ranked: TRanked;
   mastery: IMastery[];
 }

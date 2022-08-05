@@ -30,7 +30,7 @@ const SummonerCard = ({
       </div>
 
       <div className="flex flex-col gap-4">
-        <h2 className="text-2xl bg-gradient-to-b from-pink-400 to-blue-700 text-transparent bg-clip-text font-bold">
+        <h2 className="text-2xl main-gradient text-transparent bg-clip-text font-bold">
           {summoner.name} - Level {summoner.summonerLevel}
         </h2>
 
